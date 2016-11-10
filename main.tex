@@ -63,8 +63,11 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-\documentclass[conference]{IEEEtran}
+\documentclass[conference, ngerman]{IEEEtran}
 \usepackage{blindtext, graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
 % Add the compsoc option for Computer Society conferences.
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
@@ -345,36 +348,31 @@
 % to submit to, of course. )
 
 
+\bibliographystyle{ieeetr}
+\usepackage{multibib}
+\newcites{schund}{Weiterführende Literatur}
+
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
-
 
 \begin{document}
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Bare Demo of IEEEtran.cls for Conferences}
+\title{Evaluation aktueller Message Oriented Middleware Technolgien zum Einsatz im IoT-Umfeld}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Michael Shell}
-\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
-Georgia Institute of Technology\\
-Atlanta, Georgia 30332--0250\\
-Email: http://www.michaelshell.org/contact.html}
-\and
-\IEEEauthorblockN{Homer Simpson}
-\IEEEauthorblockA{Twentieth Century Fox\\
-Springfield, USA\\
-Email: homer@thesimpsons.com}
-\and
-\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
-\IEEEauthorblockA{Starfleet Academy\\
-San Francisco, California 96678-2391\\
-Telephone: (800) 555--1212\\
-Fax: (888) 555--1212}}
+\author{\IEEEauthorblockN{Jannis Priesnitz}
+\IEEEauthorblockA{Fachbereich Informatik\\
+Hochschule Darmstadt\\
+Schöfferstraße 3\\
+64295 Darmstadt\\
+Email: jannis.priesnitz@stud.h-da.de}
+
+}
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -413,7 +411,10 @@ Fax: (888) 555--1212}}
 
 \begin{abstract}
 %\boldmath
-\blindtext[1]
+Message Oriented Middleware (MOM) Technologien sind im Bereich der Maschine zu Maschine Kommunikation zum Standard geworden. Mit Aufkommen des Internet of Things bzw. des in Deutschland geprägten Begriffs Industrie 4.0 wurden diese Technologien zunehmend für den Bereich der Embedded Systems interessant. Hier soll die Vision "`vom Sensor in die Cloud"' in die Praxis umgesetzt werden. 
+
+Diese Arbeit soll als Entscheidungsgrundlage für die Auswahl einer MOM-Technologie für ein "`Master Projekt Systementwicklung"' im Bereich IoT an der Hochschule Darmstadt in Verbindung mit T-Systems dienen. 
+
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -424,13 +425,8 @@ Fax: (888) 555--1212}}
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-IEEEtran, journal, \LaTeX, paper, template.
+Message Oriented Middleware, IoT
 \end{IEEEkeywords}
-
-
-
-
-
 
 % For peer review papers, you can put extra information on the cover
 % page as needed:
@@ -444,11 +440,8 @@ IEEEtran, journal, \LaTeX, paper, template.
 
 
 
-\section{Introduction}
-\blindtext
 
-\subsection{Subsection Heading Here}
-\blindtext
+
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
@@ -536,12 +529,90 @@ IEEEtran, journal, \LaTeX, paper, template.
 % stfloats package.
 
 
+% Möglichkeiten 
+\section{Einführung}
 
-\section{Conclusion}
-\blindtext
+Im Gegensatz zur weit verbreiteten Client-Server Architektur, die beispielsweise im Internet angewendet wird, steht bei Message Oriented Middleware die Kommunikation zwischen Clients im Vordergrund. Hierbei steht ein \textit{Message Broker} im Mittelpunkt, welcher den Nachrichtenfluss der Clients koordiniert. Clients veröffentlichen (\textit{publish}) Nachrichten bezüglich eines Themas (\textit{topic}) und abonnieren (\textit{subscribe}) sich wiederum Themen, zu denen sie Nachrichten erhalten wollen\cite{wiki:PubSubAMQ}. Der Message Broker funktioniert somit als Grand Central Dispatcher zwischen allen angeschlossenen Clients. Ähnlich wie beim Client-Server-Modell sind die Kommunikationsteilnehmer nicht auf eine Hardwarearchitektur, ein Betriebssystem oder eine Programmiersprache festgelegt. Zudem sieht die Arichtektur eine M-zu-N-Kommunikation vor, bei der beliebig viele Clients auf einem Topic Nachrichten veröffentlichen und empfangen können (Vgl.\ref{fig:MOM_BILD}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\linewidth]{MOM_BILD}
+\caption{Schematische Darstellung der MOM-Architektur}
+\label{fig:MOM_BILD}
+\end{figure}
 
 
+ Grundlage dieser Architektur ist das Advanced Messaging Queue Protocol (AMQP)\cite{wiki:AMQP}, welches die wichtigen Punkte Sicherheit, Zuverlässigkeit (\textit{Qualities of Service})und Kommunikationsverhalten spezifiziert. Aktuelle Implementierungen enthalten noch zusätzliche Funktionen zur Performancesteigerung und Ausfallsicherheit.
 
+
+\section{Anforderungen und Evaluationskriterien}
+
+\subsection{Hardwarevoraussetzungen}
+Bei der Evaluation ist im IoT-Kontext zu beachten, dass nicht nur eine hohe Anzahl an Devices kommunizieren, sondern auch, dass diese sehr unterschiedliche Hardwarevoraussetzungen  mitbringen. 
+\subsection{Clients}
+%Systemvorraussetzungen -> Arduino
+%C binding
+Im IoT-Umfeld ist es üblich, dass Embedded Devices die Daten von verschiedenen Sensoren einsammeln und diese publizieren. Diese Systeme verfügen in der Regel nur über wenige Kilobyte Arbeitsspeicher und haben kein Betriebssystem. Um diese Systeme zu unterstützen, sollten die MOMs über ein C-Binding verfügen, welches in Umgebungen ohne Betriebssystem integriert werden kann und i.A. recourcenschonender ist als interpretierte Sprachen.
+
+\subsection{Anbindung an BigData Server und Clouds}
+Die von Sensoren generierten Daten werden im Allgemeinen auf Big Data Servern oder in Cloudlösungen abgelegt, die aus diesen Schlüsse ziehen. Hier sollte die Performance des Brokers keinen Flaschenhals des Systems darstellen, was neben Hardware- auch Softwareanforderungen stellt. So wäre z.B. eine Verteilung des Brokers auf mehrere Hardwareplattformen eine interessante Alternative. 
+
+\section{Ausgewählte MOM-Implementierungen vorgestellt}
+In diesem Abschnitt werden ausgewählte Implementierungen vorgestellt, welche alle unter nicht kommerziellen Lizenzen vertrieben werden und frei nutzbar sind. 
+\subsection{Hinweis zur Bewertung}
+Aufgrund des kurzen Zeitrahmens zur Ausarbeitung dieses Textes konnten nicht alle Entscheidungskriterien wissenschaftlich bewiesen (z.B. durch prototypische Implementierung oder Performancemessungen etc.) und hinreichend begründet werden und beruhen zum Teil auf einem ersten Eindruck und Gefühl. Diese Arbeit versteht sich eher als Basis für detailliertere Evaluationen. Das Fazit soll ebenfalls als  Vorschlag auf Basis der bisherigen Erkenntnisse als Diskussionsanregung dienen. 
+\subsection{Übersicht über berücksichtigte Implementierungen}
+Die folgenden Technologien wurden im Rahmen der Recherche berücksichtigt, jedoch nicht weiter verfolgt: 
+\begin{itemize}
+	\item Enduro/X: Interessante Ansätze (echtzeitfähig, POSIX Kernel Queues, ...) sehr junges Projekt und eine kleine Community
+	%http://www.endurox.org/
+	\item HornetQ: Sehr stark im High Performance Bereich angesiedelt
+	%http://www.heise.de/developer/meldung/HornetQ-Neues-Messaging-System-von-JBoss-752869.html
+	%http://hornetq.jboss.org/
+	\item ZeroMQ: Läuft ohne Broker auf Basis von Berkley Sockets\cite{wiki:ZMQ}.
+	%https://en.wikipedia.org/wiki/ZeroMQ
+	\item StormMQ: Kein C-Binding, serviceorientiert, starker Fokus auf Sicherheit\cite{wiki:SMQ}. 
+	%http://stormmq.com/
+	\item NATS: Zu spät für ein detailiertes Review gefunden. Eher im high Performance Bereich angesiedelt\cite{DisMeQu}. 
+	%https://en.wikipedia.org/wiki/NATS_Messaging
+	\item MSMQ: Starke Abhängigkeiten zu Microsoft\cite{wiki:MsMessQueu}.
+	\item Gearman: Keine aktive Entwicklung mehr\cite{wiki:GEAR}. 
+	%https://en.wikipedia.org/wiki/Gearman
+	\item Celery: Interessantes Konzept. Einstieg erscheint jedoch kompliziert\cite{wiki:CELERY}\cite{wiki:CWIKI}. 
+	%http://www.celeryproject.org/docs-and-support/
+\end{itemize}
+
+\subsection{RabbitMQ}
+Die erste der näher evaluierten Alternativen stellt RabbitMQ dar. RabbitMQ erweist sich den publizierten Informationen nach als sehr universell einsetzbar. Neben zahlreichen Aspekten zur Ausfallsicherheit und Hochverfügbarkeit verfügt es ebenfalls über ein Management Plugin im Broker, welches Konfiguration, Monitoring und Debugging vereinfacht\cite{WHATRMQ}. Des weiteren verfügt RabbitMQ über ein C-Binding, über dessen Kompatibilität zu Embedded Systems kann aktuell jedoch keine Aussage getroffen werden\cite{RMQEMB}\cite{RMQ_IOT}. Ein positiver Aspekt ist ebenfalls, dass RabitMQ seit Jahren aktiv weiterentwickelt wird und über eine groß Community verfügt. 
+%C_binding 
+\subsection{MQTT}
+Traut man Internetnachrichtendiensten oder schaut man auf die Agenden von Developertalks, so bekommt man den Eindruck, dass sich MQTT als Standardprotokoll im IoT Umfeld etabliert hat\cite{UNDERPROT}\cite{FIVETHINGS}. Der Hauptgrund dafür sind vor allem die sehr leichtgewichtigen Clientimplementierungen, welche auf den kleinsten SoCs lauffähig sind.\cite{wiki:MQTT} Auch der Broker ist eher auf Einfachheit optimiert und verzichtet beispielsweise auf eine Autorisierung, um die Nachrichtenlänge möglichst kurz zu halten\cite{MQTTSEC}. Außerdem wurde auf Replikationsoptionen, Clustering und Fehlerbehandlungen verzichtet. Vermutlich ist die maximale Performance des MQTT Brokers den anderen Technologien ebenfalls unterlegen. Diese Einfachheit ermöglicht jedoch auch eine zielstrebige Implementierung von Prototypen\cite{KOMQTT}\cite{KOMAPPIN}. 
+%C binding 
+%Embedded Devices kompatibel
+%Limitierungen im HighPerformance bereich
+
+\subsection{Apache ActiveMQ}
+Die Hauptvorteile von ActiveMQ bestehen in der Möglichkeit, ein Netz aus Brokern zu betreiben, in dem Clients sich zu einem beliebigen Broker verbinden. Fällt der Broker aus, wird automatisch ein Reconnect auf einem anderen Brocker durchgeführt. Das Routing zwischen den Endpunkt findet dabei vollkommen transparent zum Client statt. Replikation von Brokern wird ebenfalls unterstützt. Dadurch wird ActiveMQ hohen Anforderungen an Performance und Ausfallsicherheit gerecht. Für die Clientintegration stehen zahlreiche Bindings zur Verfügung, welche laut Apache jedoch primär darauf abzielen, legacy Code von Enterpriseapplications zu in neue MOM-Umgebungen integrieren. Auch ActiveMQ wird aktuell noch weiterentwickelt und verfügt über eine ausführliche Dokumentation.\cite{wiki:AAMQ}
+
+\subsection{Apache Kafka}
+Apache Kafka stellt mit einem anderen Konzept eine Alternative zu den zuvor vorgestellten Technologien dar. Kafka stellt primär ein Software Paket zur Verarbeitung von Datenströmen dar, welches hoch skalierbar ist und verteilt operieren kann und somit hervorragend im BigData Bereich einsetzbar ist\cite{wiki:AKAFKA}\footnote{Kafka ist also streng genommen keine Message Oriented Middleware. Da es sich aber u.U. um eine für das Projekt interessante Technologie handelt, soll sie hier trotzdem Beachtung finden.}. Kafka ist in der Lage, große Nachrichtenvolumen durch Load Balancing und Clustering deutlich schneller zu verarbeiten, als eine MOM Lösung, kann jedoch nicht ohne eines der o.g. MOMs als Datenquelle eingesetzt werden und wäre daher eher Teil einer hybriden Lösung, wie in \ref{test} beschrieben. Kafka soll leicht installierbar sein und verfügt über eine unfangreiche Dokumentation\cite{AKW}. 
+
+\subsection{Hybride Lösungen}\label{test}
+%http://blog.airasoul.io/the-internet-of-things-with-rabbitmq-node-js-mqtt-and-amqp/
+Wie bereits in der Einführung beschrieben, kommen im Bereich IoT-Systeme mit sehr unterschiedlichen Hardwarevorraussetzungen zum Einsatz. Dies macht eine hybride Lösung aus mehreren Middlewaretechnologien interessant. 
+
+Zum einen wäre eine Zwei-Stufen-Lösung denkbar, in der ein oder mehrere Message Broker ein Kafka BigData System mit Daten versorgen, welches diese aufbereitet und in einer Cloud ablegt. Hierbei sollte im aktuellen Projekt jedoch Implementierungsaufwand und Nutzen abgewogen werden. 
+
+Zum anderen existieren Schnittstellen zwischen den vorgestellten Systemen, die es möglich machen, die Vorteile der jeweiligen Systeme zu nutzen. Mehrwert und Funktionalität sollten aber auch hier genau evaluiert werden.
+
+% use section* for acknowledgement
+\section{Fazit in Bezug auf das konkrete Projekt}
+Zusammenfassend kann man sagen, dass jede der vorgestellten Message Oriented Middleware Implementierungen, RabbitMQ, MQTT und ApacheMQ, prinzipiell die gestellten Anforderungen erfüllt\cite{ExplMessBrok}. Geht man weiter ins Detail, offenbaren sich Unterschiede, die für das Projekt relevant sein können. Daher sollte die Entscheidung welche Technologie eingesetzt wird, auf Basis der Embedded Devices, die verwendet werden und des erwarteten Nachrichtenvolumens im gesamten Netzwerk getroffen werden. Außerdem sind implementierungsspezifische Besonderheiten der jeweiligen MOM noch nicht bekannt. Auch eine Implementierung, die hier nicht näher betrachtet wurde, wie EnduroX oder NATS, wäre prinzipiell für den Einsatz im Projekt denkbar.  Ein weiterer wichtiger Entscheidungspunkt ist inwieweit Data Streaming Architecturs und Clouddienste zum Einsatz kommen sollen und diese selbst bereit gestellt werden sollen. Für diese Anforderung bietet Apache Kafka ein mächtiges Werkzeug.
+
+\section{Die nächsten Schritte}
+Als nächsten Schritte sollten nun zum einen die Anforderungen an die Message Oriented Middleware auf Basis der genauen Projektbeschreibung ausgearbeitet werden. Zum anderen sollte ein beispielhaftes Setup und eine Referenzimplementierung für die in Frage kommenden Systeme erfolgen, um Limitierungen und Schwierigkeiten möglichst frühzeitig zu erkennen.
+\citeschund{banavar1999case}
+\cite{estrada2015comparing}
 
 
 % if have a single appendix:
@@ -558,16 +629,7 @@ IEEEtran, journal, \LaTeX, paper, template.
 % starts a section numbered zero.)
 %
 
-
 \appendices
-\section{Proof of the First Zonklar Equation}
-\blindtext
-
-% use section* for acknowledgement
-\section*{Acknowledgment}
-
-
-The authors would like to thank...
 
 
 % Can use something like this to put references on a page
@@ -600,13 +662,22 @@ The authors would like to thank...
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\begin{thebibliography}{1}
+\nocite{*}
+\nociteschund{*}
+\renewcommand\refname{Quellen}
+\bibliography{Quellen} 
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Achtung unbedingt mit 
+% bibtex main 
+% und
+% bibtex schund 
+% kompilieren
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\end{thebibliography}
+\bibliographystyleschund{ieeetr}
+\bibliographyschund{Quellen2}
+
 
 % biography section
 % 
@@ -619,9 +690,7 @@ H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
 %\begin{biography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
 
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{picture}}]{John Doe}
-\blindtext
-\end{IEEEbiography}
+
 
 % You can push biographies down or up by placing
 % a \vfill before or after them. The appropriate
